@@ -25,7 +25,7 @@ def init_db():
     """)
 
     cur.execute("""
-    CREATE TABLE auth_logs(
+    CREATE TABLE IF NOT EXISTS auth_logs(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         request_ip TEXT NOT NULL,
         request_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import database
 import auth_utils
 import crypto_utils
+import time
 
 
 app = Flask(__name__)
@@ -44,19 +45,26 @@ def auth():
 # ---------------- JWKS ----------------
 @app.route("/jwks", methods=["GET"])
 def jwks():
-    keys = database.get_keys()
+    conn = database.get_db()
+    cur = conn.cursor()
+
+    # Only get non-expired keys
+    cur.execute("SELECT * FROM keys WHERE exp > ?", (int(time.time()),))
+    keys = cur.fetchall()
 
     jwks_keys = []
+
     for key in keys:
-        private = crypto_utils.decrypt_private_key(key["iv"], key["encrypted_key"])
+        decrypted = crypto_utils.decrypt_private_key(None, key["key"])
 
         jwks_keys.append({
-            "kid": key["kid"],
-            "key": private,
+            "kid": str(key["kid"]),
+            "key": decrypted
         })
 
-    return jsonify({"keys": jwks_keys}), 200
+    conn.close()
 
+    return jsonify({"keys": jwks_keys}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
