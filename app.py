@@ -9,7 +9,6 @@ app = Flask(__name__)
 
 database.init_db()
 
-
 # ---------------- REGISTER ----------------
 @app.route("/register", methods=["POST"])
 def register():
