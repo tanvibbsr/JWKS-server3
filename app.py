@@ -9,6 +9,9 @@ app = Flask(__name__)
 
 database.init_db()
 
+@app.route("/")
+def home():
+    return "JWKS Server is running!"
 # ---------------- REGISTER ----------------
 @app.route("/register", methods=["POST"])
 def register():
