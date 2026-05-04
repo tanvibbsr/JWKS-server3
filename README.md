@@ -64,12 +64,7 @@ Returns all valid (non-expired) keys.
 
 -----------------------------------------------------
 
-## Notes
 
-* Authentication requests are logged with IP, timestamp, and user ID.
-* Keys are stored securely and filtered by expiration.
-
------------------------------------------------------
 
 
 
